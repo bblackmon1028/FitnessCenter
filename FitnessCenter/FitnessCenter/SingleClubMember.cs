@@ -9,6 +9,13 @@ namespace FitnessCenter
     public class SingleMemberClub : Member
     {
         public string ClubMember { get; set; }
+        public SingleMemberClub(int id, string name , string clubMember)
+        {
+            Id = id;
+            Name = name;
+            ClubMember = clubMember;
+            Fee = 8;
+        }
         public override void CheckIn(Club club)
         {
 

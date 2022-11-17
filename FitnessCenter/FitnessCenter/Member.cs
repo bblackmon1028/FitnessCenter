@@ -8,6 +8,7 @@ namespace FitnessCenter
 {
     public abstract class Member
     {
+        public double Fee { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
 
