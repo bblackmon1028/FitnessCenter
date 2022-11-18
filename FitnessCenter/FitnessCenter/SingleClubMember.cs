@@ -16,6 +16,10 @@ namespace FitnessCenter
             ClubMember = clubMember;
             Fee = 8;
         }
+        public SingleClubMember()
+        {
+
+        }
         public override void CheckIn(Club club)
         {
 
