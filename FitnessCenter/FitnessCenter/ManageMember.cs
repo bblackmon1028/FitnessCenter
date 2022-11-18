@@ -8,8 +8,8 @@ namespace FitnessCenter
 
         public ManageMember()
         {
-            Members = new List<Member>() { new SingleClubMember(1, "Bob", "ABC Club"), new MultiClubMember(2, "Sue") };
-            //Members = FileManagement.ReadFile();
+            //Members = new List<Member>() { new SingleClubMember(1, "Bob", "ABC Club"), new MultiClubMember(2, "Sue") };
+            Members = FileManagement.ReadFile();
         }
 
         public void AddMember(string memberName)
@@ -31,7 +31,7 @@ namespace FitnessCenter
                 FileManagement.WriteFile(Members);
             }
             else
-                throw new Exception("Ivnalid member name/club passed when trying to add member");
+                throw new Exception("Invalid member name/club passed when trying to add member");
         }
 
         public void RemoveMember(int id)
