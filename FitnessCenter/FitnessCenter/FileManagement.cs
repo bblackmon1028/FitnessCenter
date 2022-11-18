@@ -18,18 +18,10 @@ namespace FitnessCenter
             {
                 sw.WriteLine($"{member.Fee}|{member.Name}|{member.Id}");
             }
-            
             sw.Flush();
             sw.Close();
         }
-        public static void WriteFile(int id, string name, string clubMember)
-        {
-            StreamWriter sw = new StreamWriter(FilePathMember, true);
-            sw.WriteLine($"{id}|{name}|{clubMember}");
-            sw.Flush();
-            sw.Close();
-
-        }
+        
 
         public static void RemoveFromFile()
         {
@@ -43,7 +35,7 @@ namespace FitnessCenter
                     break;
                 }
                 string[] parts = line.Split('|');
-                mem
+                
             }
         }
 
