@@ -2,8 +2,8 @@
 Console.WriteLine("Welcome to Grand Circus Gym!\nUnless you die, keep going!");
 Console.WriteLine("Please choose from the following menu options:");
 ﻿Console.WriteLine("Welcome to Grand Circus Gym!");
-Console.WriteLine("\nUnless you die, keep going!");
-Console.WriteLine("\n\nPlease choose from the following menu options:");
+Console.WriteLine("Unless you die, keep going!");
+Console.WriteLine("Please choose from the following menu options:");
 Console.WriteLine("1. Add Member");
 Console.WriteLine("2. Remove Member");
 Console.WriteLine("3. Display Member Information");
