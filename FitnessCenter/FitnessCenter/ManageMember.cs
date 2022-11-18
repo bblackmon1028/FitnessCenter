@@ -25,7 +25,7 @@ namespace FitnessCenter
 
         public void AddMember(string memberName, string clubName)
         {
-            if (!string.IsNullOrEmpty(memberName && !string.IsNullOrEmpty(clubName)
+            if (!string.IsNullOrEmpty(memberName) && !string.IsNullOrEmpty(clubName))
             {
 
                 Members.Add(new SingleClubMember(GetNextId(), memberName, clubName));
