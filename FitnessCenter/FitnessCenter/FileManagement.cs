@@ -9,9 +9,17 @@ namespace FitnessCenter
 {
     public class FileManagement
     {
-        public void AddToFile()
+        public const string FilePathClubs = @"C:\stuff\FitnessClubs.txt";
+        public const string FilePathMember = @"C:\stuff\FitnessMembers.txt";
+        public void AddToFile(string name, string address)
         {
-
+            StreamWriter sw = new StreamWriter(FilePathClubs, true);
+            sw.Flush();
+            sw.Close();
+        }
+        public void AddToFile(int id, string name, string clubMember)
+        {
+            StreamReader sw = new StreamReader(FilePathMember, true);
         }
 
         public void RemoveFromFile()
