@@ -30,24 +30,6 @@ namespace FitnessCenter
             
             sw.Close();
         }
-        
-
-        public static void RemoveFromFile()
-        {
-            StreamReader sr = new StreamReader(FilePathMember);
-            List<Member> members = new List<Member>();
-            while (true)
-            {
-                var line = sr.ReadLine();
-                if (line == null)
-                {
-                    break;
-                }
-                string[] parts = line.Split('|');
-                
-            }
-        }
-
         public static List<Member> ReadFile()
         {
             StreamReader sr = new StreamReader(FilePathMember);
@@ -87,15 +69,16 @@ namespace FitnessCenter
                     multiClubMembers.Add(multiClubMember);
                 }
 
-
-                members = multiClubMembers.Union(singleClubMembers);
-
-
-
             }
 
-
-
+            foreach (var member in multiClubMembers)
+            {
+                members.Add(member);
+            }
+            foreach (var member in singleClubMembers)
+            {
+                members.Add(member);
+            }
 
             return members;
         }
