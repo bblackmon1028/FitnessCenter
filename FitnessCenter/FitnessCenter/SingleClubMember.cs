@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace FitnessCenter
 {
-    public class SingleMemberClub : Member
+    public class SingleClubMember : Member
     {
         public string ClubMember { get; set; }
-        public SingleMemberClub(int id, string name , string clubMember)
+        public SingleClubMember(int id, string name , string clubMember)
         {
             Id = id;
             Name = name;
