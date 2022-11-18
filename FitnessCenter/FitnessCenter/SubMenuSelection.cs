@@ -11,57 +11,86 @@ namespace FitnessCenter
     {
         public static void DisplaySelectedSubMenu(int userAnswer)
         {
-            while (true)
+            bool validInput = true;
+            do
             {
                 switch (userAnswer)
                 {
                     case 1:
                         Console.WriteLine("Please enter the name of the member you would like to add:");
                         string addMember = Console.ReadLine();
-                        ValidateAddMember(addMember);
+                        Console.WriteLine("Please select a membership type:\n1.Single\n2.Multi-Club");
+                        string membershipType = Console.ReadLine();
+
+                        if (Convert.ToInt32(membershipType) == 1)
+                        {
+                            validInput = ValidateAddMember(addMember, membershipType);
+                        }
+                        else
+                        {
+                            validInput = ValidateAddMember(addMember);
+                        }
+
+                        
                         break;
                     case 2:
                         Console.WriteLine("Please enter the name of the member you would like to remove:");
                         string remove = Console.ReadLine();
-                        ValidateRemoveMember(remove);
+                        validInput = ValidateRemoveMember(remove);
                         break;
                     case 3:
-                        Console.WriteLine("Please enter the name of the member info you would like to display;")
-                        ManageMember.DisplayMemberInformation();
-                        break;
-                    case 4:
-                        //();
+                        Console.WriteLine("Please enter the name of the member info you would like to display;");
+                        string display = Console.ReadLine();
+                        validInput = ValidateDisplayMemberInfo(display);
                         break;
 
                     default:
-                        "That is not a valid answer, please select again";
+                        Console.WriteLine("That is not a valid answer, please select again");
                         break;
                 }
             }
+            while (validInput == false);
         }
         public static bool ValidateAddMember(string readLine)
         {
             try
             {
-                ManageMember.AddMember(readLine);
+                ManageMember member = new ManageMember();
+                member.AddMember(readLine);
+                Console.WriteLine($"{readLine} has been successfully added!");
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("That is not a valid member name. Please try again.");
+                Console.WriteLine("That is not a valid selection. Please try again.");
                 return false;
             }
         }
-
+        public static bool ValidateAddMember(string readLine, string memberType)
+        {
+            try
+            {
+                ManageMember member = new ManageMember();
+                member.AddMember(readLine, memberType);
+                Console.WriteLine($"{readLine} has been successfully added!");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("That is not a valid selection. Please try again.");
+                return false;
+            }
+        }
         public static bool ValidateRemoveMember(string readLine)
         {
             try
             {
-                ManageMember.RemoveMember(readLine);
+                ManageMember member = new ManageMember();
+                member.RemoveMember(readLine);
                 return true;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("That is not a valid member name. Please try again.");
                 return false;
@@ -72,10 +101,23 @@ namespace FitnessCenter
         {
             try
             {
-                bool canConvert = int.TryParse(readLine);
-                if (Convert.ToInt32(readLine))
-                    
-                    ManageMember.DisplayMemberInfo
+                ManageMember member = new ManageMember();
+                bool canConvert = int.TryParse(readLine, out int result);
+                if (canConvert)
+                {
+                    member.GetMember(result);
+                    return true;
+                }
+                else
+                {
+                    member.GetMember(readLine);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("That is not a valid member name. Please try again.");
+                return false;
             }
         }
     }
