@@ -14,11 +14,20 @@ namespace FitnessCenter
         public static void WriteFile(List<Member> members)
         {
             StreamWriter sw = new StreamWriter(FilePathMember);
+            
             foreach (var member in members)
             {
-                sw.WriteLine($"{member.Fee}|{member.Name}|{member.Id}");
+                if (member is MultiClubMember)
+                {
+                    sw.WriteLine($"{member.Fee}|{member.Name}|{member.Id}");
+                }
+                if (member is SingleClubMember)
+                {
+                    sw.WriteLine($"{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
+                }
+                
             }
-            sw.Flush();
+            
             sw.Close();
         }
         
@@ -39,7 +48,7 @@ namespace FitnessCenter
             }
         }
 
-        public static void ReadFile()
+        public static List<Member> ReadFile()
         {
 
         }
