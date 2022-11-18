@@ -87,7 +87,10 @@ namespace FitnessCenter
 
         private int GetNextId()
         {
-            return Members.Select(x => x.Id).Max() + 1;
+            if (Members.Count == 0)
+                return 1;
+            else
+                return Members.Select(x => x.Id).Max() + 1;
         }
     }
 }
