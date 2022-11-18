@@ -14,33 +14,74 @@ namespace FitnessCenter
         public static void WriteFile(List<Member> members)
         {
             StreamWriter sw = new StreamWriter(FilePathMember);
+            
             foreach (var member in members)
             {
-                sw.WriteLine($"{member.Fee}|{member.Name}|{member.Id}");
+                if (member is MultiClubMember)
+                {
+                    sw.WriteLine($"{"M"}|{member.Fee}|{member.Name}|{member.Id}");
+                }
+                if (member is SingleClubMember)
+                {
+                    sw.WriteLine($"{"S"}|{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
+                }
+                
             }
-            sw.Flush();
+            
             sw.Close();
         }
-        
-
-        public static void RemoveFromFile()
+        public static List<Member> ReadFile()
         {
             StreamReader sr = new StreamReader(FilePathMember);
             List<Member> members = new List<Member>();
+            List<SingleClubMember> singleClubMembers = new List<SingleClubMember>();
+            List<MultiClubMember> multiClubMembers = new List<MultiClubMember>();
+
             while (true)
             {
-                string line = sr.ReadLine();
+                var line = sr.ReadLine();
                 if (line == null)
                 {
                     break;
                 }
                 string[] parts = line.Split('|');
+
+                if (parts[0] == "S")
+                {
+                    SingleClubMember singleClubMember = new SingleClubMember
+                    {
+                        Fee = Convert.ToDouble(parts[1]),
+                        Name = parts[2],
+                        Id = Convert.ToInt32(parts[3]),
+                        ClubMember = parts[4]
+                    };
+                    singleClubMembers.Add(singleClubMember);
+                }
+                if (parts[0] == "M")
+                {
+                    MultiClubMember multiClubMember = new MultiClubMember
+                    {
+                        Fee = Convert.ToDouble(parts[1]),
+                        Name = parts[2],
+                        Id = Convert.ToInt32(parts[3]),
+                        ClubMember = parts[4]
+                    };
+                    multiClubMembers.Add(multiClubMember);
+                }
+
+
             }
-        }
 
-        public static void ReadFile()
-        {
+            foreach (var member in multiClubMembers)
+            {
+                members.Add(member);
+            }
+            foreach (var member in singleClubMembers)
+            {
+                members.Add(member);
+            }
 
+            return members;
         }
     }
 }
