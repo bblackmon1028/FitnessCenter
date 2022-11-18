@@ -8,13 +8,13 @@ namespace FitnessCenter
 
         public ManageMember()
         {
-            //Members = new List<Member>() { new SingleClubMember(1, "Bob", "ABC Club"), new MultiClubMember(2, "Sue") };
-            Members = FileManagement.ReadFile();
+            Members = new List<Member>() { new SingleClubMember(1, "Bob", "ABC Club"), new MultiClubMember(2, "Sue") };
+            //Members = FileManagement.ReadFile();
         }
 
         public void AddMember(string memberName)
         {
-            if (!string.IsNullOrEmpty(memberName)
+            if (!string.IsNullOrEmpty(memberName))
             {
                 Members.Add(new MultiClubMember(GetNextId(), memberName));
                 FileManagement.WriteFile(Members);
@@ -25,9 +25,8 @@ namespace FitnessCenter
 
         public void AddMember(string memberName, string clubName)
         {
-            if (!string.IsNullOrEmpty(memberName && !string.IsNullOrEmpty(clubName)
+            if (!string.IsNullOrEmpty(memberName) && !string.IsNullOrEmpty(clubName))
             {
-
                 Members.Add(new SingleClubMember(GetNextId(), memberName, clubName));
                 FileManagement.WriteFile(Members);
             }
@@ -87,7 +86,10 @@ namespace FitnessCenter
 
         private int GetNextId()
         {
-            return Members.Select(x => x.Id).Max() + 1;
+            if (Members.Count == 0)
+                return 1;
+            else
+                return Members.Select(x => x.Id).Max() + 1;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace FitnessCenter
                     break;
                 }
                 string[] parts = line.Split('|');
-                
+
                 if (parts[0] == "S")
                 {
                     SingleClubMember singleClubMember = new SingleClubMember
@@ -68,6 +68,7 @@ namespace FitnessCenter
                     };
                     multiClubMembers.Add(multiClubMember);
                 }
+
 
             }
 
