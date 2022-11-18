@@ -1,9 +1,7 @@
 ﻿using FitnessCenter;
-Console.WriteLine("Welcome to Grand Circus Gym!\nUnless you die, keep going!");
-Console.WriteLine("Please choose from the following menu options:");
-﻿Console.WriteLine("Welcome to Grand Circus Gym!");
-Console.WriteLine("Unless you die, keep going!");
-Console.WriteLine("Please choose from the following menu options:");
+
+Console.WriteLine("Welcome to Grand Circus Gym! Unless you die, keep going!");
+Console.WriteLine("\nPlease choose from the following menu options:");
 Console.WriteLine("1. Add Member");
 Console.WriteLine("2. Remove Member");
 Console.WriteLine("3. Display Member Information");

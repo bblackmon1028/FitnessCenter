@@ -35,7 +35,6 @@ namespace FitnessCenter
                     break;
                 }
                 string[] parts = line.Split('|');
-                
             }
         }
 
