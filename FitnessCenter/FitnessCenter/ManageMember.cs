@@ -8,8 +8,8 @@ namespace FitnessCenter
 
         public ManageMember()
         {
-            Members = new List<Member>() { new SingleClubMember(1, "Bob", "ABC Club"), new MultiClubMember(2, "Sue") };
-            //Members = FileManagement.ReadFile();
+            //Members = new List<Member>() { new SingleClubMember(1, "Bob", "ABC Club"), new MultiClubMember(2, "Sue") };
+            Members = FileManagement.ReadFile();
         }
 
         public void AddMember(string memberName)
