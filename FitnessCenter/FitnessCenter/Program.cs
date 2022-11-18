@@ -1,2 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using FitnessCenter;
+using System.IO;
+
+
+
+
+
