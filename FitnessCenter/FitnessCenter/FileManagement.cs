@@ -7,27 +7,47 @@ using System.IO;
 
 namespace FitnessCenter
 {
-    public class FileManagement
+    public static class FileManagement
     {
-        public const string FilePathClubs = @"C:\stuff\FitnessClubs.txt";
+        
         public const string FilePathMember = @"C:\stuff\FitnessMembers.txt";
-        public void AddToFile(string name, string address)
+        public static void WriteFile(List<Member> members)
         {
-            StreamWriter sw = new StreamWriter(FilePathClubs, true);
+            StreamWriter sw = new StreamWriter(FilePathMember);
+            foreach (var member in members)
+            {
+                sw.WriteLine($"{member.Fee}|{member.Name}|{member.Id}");
+            }
+            
             sw.Flush();
             sw.Close();
         }
-        public void AddToFile(int id, string name, string clubMember)
+        public static void WriteFile(int id, string name, string clubMember)
         {
-            StreamReader sw = new StreamReader(FilePathMember, true);
+            StreamWriter sw = new StreamWriter(FilePathMember, true);
+            sw.WriteLine($"{id}|{name}|{clubMember}");
+            sw.Flush();
+            sw.Close();
+
         }
 
-        public void RemoveFromFile()
+        public static void RemoveFromFile()
         {
-
+            StreamReader sr = new StreamReader(FilePathMember);
+            List<Member> members = new List<Member>();
+            while (true)
+            {
+                string line = sr.ReadLine();
+                if (line == null)
+                {
+                    break;
+                }
+                string[] parts = line.Split('|');
+                mem
+            }
         }
 
-        public void ReadFile()
+        public static void ReadFile()
         {
 
         }
