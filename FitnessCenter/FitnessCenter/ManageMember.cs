@@ -31,7 +31,7 @@ namespace FitnessCenter
                 FileManagement.WriteFile(Members);
             }
             else
-                throw new Exception("Ivnalid member name/club passed when trying to add member");
+                throw new Exception("Invalid member name/club passed when trying to add member");
         }
 
         public void RemoveMember(int id)
