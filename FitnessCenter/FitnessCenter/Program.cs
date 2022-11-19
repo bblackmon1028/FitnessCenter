@@ -8,7 +8,7 @@ while (true)
     Console.WriteLine("2. Remove Member");
     Console.WriteLine("3. Display Member Information");
     Console.WriteLine("4. Check Into Club");
-    Console.WriteLine("5. Check Membership Fee & Points");
+    Console.WriteLine("5. Generate Bill Of Fees");
     Console.WriteLine("6. Exit");
     string userAnswer = Console.ReadLine();
     SubMenuSelection.DisplaySelectedSubMenu(ValidateMenuSelection(userAnswer));
@@ -29,6 +29,10 @@ int ValidateMenuSelection(string option)
     try
     {
         int userSelection = Convert.ToInt32(option);
+        if(userSelection > 6 || userSelection < 1)
+        {
+            return -1;
+        }
         return userSelection;
     }
     catch (System.FormatException)

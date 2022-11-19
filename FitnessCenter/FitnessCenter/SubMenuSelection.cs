@@ -37,9 +37,17 @@ namespace FitnessCenter
                         validInput = ValidateRemoveMember(remove);
                         break;
                     case 3:
-                        Console.WriteLine("Please enter the name of the member info you would like to display;");
+                        Console.WriteLine("Please enter the name or ID of the member info you would like to display:");
                         string display = Console.ReadLine();
                         validInput = ValidateDisplayMemberInfo(display);
+                        break;
+                    case 4:
+                        Console.WriteLine("Please select the club you would like to check into");
+                        break;
+                    case 5:
+                        Console.WriteLine("Please enter the name or ID of the member you would like to generate bill for:");
+                        string generateBill = Console.ReadLine();
+                        validInput = ValidateGenerateBillInfo(generateBill);
                         break;
                     default:
                         break;
@@ -104,7 +112,6 @@ namespace FitnessCenter
                     Member requestedMember = member.GetMember(result);
                     Console.WriteLine($"Name:{requestedMember.Name}" +
                         $"\nId Number: {requestedMember.Id}" +
-                        $"\nMember Fee:{requestedMember.Fee}" +
                         $"\nClub Member:{requestedMember.ClubMember}");
                     return true;
                 }
@@ -113,14 +120,55 @@ namespace FitnessCenter
                     Member requestedMember = member.GetMember(readLine);
                     Console.WriteLine($"Name:{requestedMember.Name}" +
                         $"\nId Number: {requestedMember.Id}" +
-                        $"\nMember Fee:{requestedMember.Fee}" +
                         $"\nClub Member:{requestedMember.ClubMember}");
                     return true;
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member name. Press 0 to enter a new name or press 9 to return to main menu:");
+                Console.WriteLine("That is not a valid member. Press 0 to enter a new member or press 9 to return to main menu:");
+                return ReturnToMainMenu();
+            }
+        }
+
+        public static bool ValidateCheckIntoClub(string readLine)
+        {
+            try
+            {
+                Convert.ToInt32(readLine);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        public static bool ValidateGenerateBillInfo(string readLine)
+        {
+            try
+            {
+                ManageMember member = new ManageMember();
+                bool canConvert = int.TryParse(readLine, out int result);
+                if (canConvert)
+                {
+                    Member requestedMember = member.GetMember(result);
+                    Console.WriteLine($"Name:{requestedMember.Name}" +
+                        $"\nMember Fee:{requestedMember.Fee}");
+                    return true;
+                }
+                else
+                {
+                    Member requestedMember = member.GetMember(readLine);
+                    Console.WriteLine($"Name:{requestedMember.Name}" +
+                        $"\nMember Fee:{requestedMember.Fee}");
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("That is not a valid member name. Press 0 to enter a new member or press 9 to return to main menu:");
                 return ReturnToMainMenu();
             }
         }
