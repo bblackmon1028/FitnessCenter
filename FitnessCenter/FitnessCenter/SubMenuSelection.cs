@@ -30,8 +30,6 @@ namespace FitnessCenter
                         {
                             validInput = ValidateAddMember(addMember);
                         }
-
-                        
                         break;
                     case 2:
                         Console.WriteLine("Please enter the name of the member you would like to remove:");
@@ -43,9 +41,7 @@ namespace FitnessCenter
                         string display = Console.ReadLine();
                         validInput = ValidateDisplayMemberInfo(display);
                         break;
-
                     default:
-                        Console.WriteLine("That is not a valid answer, please select again");
                         break;
                 }
             }
@@ -62,7 +58,7 @@ namespace FitnessCenter
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid selection. Please try again.");
+                Console.WriteLine("Member can't be added at this time. Please try again.");
                 return false;
             }
         }
@@ -77,7 +73,7 @@ namespace FitnessCenter
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid selection. Please try again.");
+                Console.WriteLine("Member can't be added at this time. Please try again.");
                 return false;
             }
         }
@@ -87,13 +83,13 @@ namespace FitnessCenter
             {
                 ManageMember member = new ManageMember();
                 member.RemoveMember(readLine);
+                Console.WriteLine($"{readLine} has been successfully removed.");
                 return true;
-
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member name. Please try again.");
-                return false;
+                Console.WriteLine("That is not a current member. Press 0 to enter a new name or press 9 to return to main menu:");
+                return ReturnToMainMenu();
             }
         }
 
@@ -105,18 +101,47 @@ namespace FitnessCenter
                 bool canConvert = int.TryParse(readLine, out int result);
                 if (canConvert)
                 {
-                    member.GetMember(result);
+                    Member requestedMember = member.GetMember(result);
+                    Console.WriteLine($"Name:{requestedMember.Name}" +
+                        $"\nId Number: {requestedMember.Id}" +
+                        $"\nMember Fee:{requestedMember.Fee}" +
+                        $"\nClub Member:{requestedMember.ClubMember}");
                     return true;
                 }
                 else
                 {
-                    member.GetMember(readLine);
+                    Member requestedMember = member.GetMember(readLine);
+                    Console.WriteLine($"Name:{requestedMember.Name}" +
+                        $"\nId Number: {requestedMember.Id}" +
+                        $"\nMember Fee:{requestedMember.Fee}" +
+                        $"\nClub Member:{requestedMember.ClubMember}");
                     return true;
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member name. Please try again.");
+                Console.WriteLine("That is not a valid member name. Press 0 to enter a new name or press 9 to return to main menu:");
+                return ReturnToMainMenu();
+            }
+        }
+
+        public static bool ReturnToMainMenu()
+        {
+            string catchResponse = Console.ReadLine();
+
+            try
+            {
+                if (Convert.ToInt32(catchResponse) == 9)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }

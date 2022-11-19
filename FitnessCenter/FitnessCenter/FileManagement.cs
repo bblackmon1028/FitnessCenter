@@ -25,11 +25,10 @@ namespace FitnessCenter
                 {
                     sw.WriteLine($"{"S"}|{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
                 }
-                
             }
-            
             sw.Close();
         }
+       
         public static List<Member> ReadFile()
         {
             StreamReader sr = new StreamReader(FilePathMember);
@@ -68,10 +67,7 @@ namespace FitnessCenter
                     };
                     multiClubMembers.Add(multiClubMember);
                 }
-
-
             }
-
             foreach (var member in multiClubMembers)
             {
                 members.Add(member);
@@ -80,7 +76,7 @@ namespace FitnessCenter
             {
                 members.Add(member);
             }
-
+            sr.Close();
             return members;
         }
     }
