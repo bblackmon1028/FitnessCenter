@@ -87,7 +87,7 @@ namespace FitnessCenter
             if (!Directory.Exists(Path.GetDirectoryName(FilePathMember)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FilePathMember));
             if (!File.Exists(FilePathMember))
-                File.Create(FilePathMember);
+                File.Create(FilePathMember).Dispose();
         }
     }
 }
