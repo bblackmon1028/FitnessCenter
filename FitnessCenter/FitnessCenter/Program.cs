@@ -9,7 +9,8 @@ while (true)
     Console.WriteLine("3. Display Member Information");
     Console.WriteLine("4. Check Into Club");
     Console.WriteLine("5. Generate Bill Of Fees");
-    Console.WriteLine("6. Exit");
+    Console.WriteLine("6. Display All Current Members");
+    Console.WriteLine("7. Exit");
     string userAnswer = Console.ReadLine();
     SubMenuSelection.DisplaySelectedSubMenu(ValidateMenuSelection(userAnswer));
 
@@ -17,7 +18,7 @@ while (true)
     {
         Console.WriteLine("That is not a valid selection. Please try again.");
     }
-    if (ValidateMenuSelection(userAnswer) == 6)
+    if (ValidateMenuSelection(userAnswer) == 7)
     {
         Console.WriteLine("Hustle for that muscle. Goodbye!");
         Environment.Exit(0);
@@ -29,7 +30,7 @@ int ValidateMenuSelection(string option)
     try
     {
         int userSelection = Convert.ToInt32(option);
-        if(userSelection > 6 || userSelection < 1)
+        if(userSelection > 7 || userSelection < 1)
         {
             return -1;
         }
