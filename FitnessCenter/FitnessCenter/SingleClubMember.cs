@@ -23,7 +23,7 @@ namespace FitnessCenter
         public override void CheckIn(Club club)
         {
 
-            if (club.name != ClubMember)
+            if (club.Name != ClubMember)
             {
                 throw new Exception("member does not belong to input club");
             }
