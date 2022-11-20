@@ -8,23 +8,15 @@ namespace FitnessCenter
 {
     public class Club
     {
-        public string name { get; set; }
-        public string  address { get; set; }
-        public string city { get; set; }
+        public string Name { get; private set; }
+        public string Address { get; private set; }
+        public string City { get; private set; }
 
-        
-
-         public static void FitnessCenter( string name, string address, string city)
+        public void Club (string name, string address, string city)
         {
-            Club Club = new Club();
-            
-            Club.name = name; Club.address = address; Club.city = city;
-
-            Club.name = $" Hello {name}welcome to the Fitness Center";
-
-            Club.address = $"In our system your address is {address}";
-
-            Club.city = $"Your current city location is {city}";
+            Name = name;
+            Address = address;
+            City = city;
         }
     }
 }
