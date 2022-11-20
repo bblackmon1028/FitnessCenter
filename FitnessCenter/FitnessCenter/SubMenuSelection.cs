@@ -28,7 +28,10 @@ namespace FitnessCenter
                             // list out club names
                             Console.WriteLine("Please enter a club that you would like a membership for");
                             string clubName = Console.ReadLine();
-                            //ClubNameValidator
+                            while (!ValidClubName(clubName))
+                            {
+                                Console.WriteLine("Im sorry, that is not a valid club, please enter another club to join");
+                            }
                             validInput = ValidateAddMember(addMember, clubName);
                         }
                         else
