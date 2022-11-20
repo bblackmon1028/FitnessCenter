@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace FitnessCenter
 {
     public class Club
@@ -13,6 +7,7 @@ namespace FitnessCenter
         public string City { get; private set; }
 
         public Club (string name, string address, string city)
+
         {
             Name = name;
             Address = address;
