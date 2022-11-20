@@ -20,11 +20,11 @@ namespace FitnessCenter
             {
                 if (member is MultiClubMember)
                 {
-                    sw.WriteLine($"{"M"}|{member.Fee}|{member.Name}|{member.Id}");
+                    sw.WriteLine($"{"Multi"}|{member.Fee}|{member.Name}|{member.Id}");
                 }
                 if (member is SingleClubMember)
                 {
-                    sw.WriteLine($"{"S"}|{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
+                    sw.WriteLine($"{"Single"}|{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
                 }
             }
             sw.Close();
@@ -47,7 +47,7 @@ namespace FitnessCenter
                 }
                 string[] parts = line.Split('|');
 
-                if (parts[0] == "S")
+                if (parts[0] == "Single")
                 {
                     SingleClubMember singleClubMember = new SingleClubMember
                     {
@@ -58,14 +58,14 @@ namespace FitnessCenter
                     };
                     singleClubMembers.Add(singleClubMember);
                 }
-                if (parts[0] == "M")
+                if (parts[0] == "Multi")
                 {
                     MultiClubMember multiClubMember = new MultiClubMember
                     {
                         Fee = Convert.ToDouble(parts[1]),
                         Name = parts[2],
                         Id = Convert.ToInt32(parts[3]),
-                        ClubMember = parts[4]
+                        
                     };
                     multiClubMembers.Add(multiClubMember);
                 }

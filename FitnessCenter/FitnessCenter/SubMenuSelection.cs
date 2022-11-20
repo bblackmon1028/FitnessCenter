@@ -54,6 +54,7 @@ namespace FitnessCenter
                 }
             }
             while (validInput == false);
+        
         }
         public static bool ValidateAddMember(string readLine)
         {
