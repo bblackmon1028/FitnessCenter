@@ -24,21 +24,7 @@ namespace FitnessCenter
 
                         if (Convert.ToInt32(membershipType) == 1)
                         {
-                            List<Club> clubs = new List<Club>();
-                            clubs.Add(new Club("Wa Fitness", "1969 Portage Trail", "Cuyahoga Falls"));
-                            clubs.Add(new Club("Little Garden Fitness", "1698 Merriman Rd", "Akron"));
-                            clubs.Add(new Club("Evolve Fitness", "1540 Georgetown Rd", "Hudson"));
-                            clubs.Add(new Club("Universe Fitness", "949 E Aurora Rd", "Macedonia"));
-
-                            Console.WriteLine("these are the clubs that are availabe to belong to");
-                            // list out club names
-                            Console.WriteLine("Please enter a club that you would like a membership for");
-                            string clubName = Console.ReadLine();
-                            while (!ValidClub(clubName.ToLower(), /* club list */))
-                            {
-                                Console.WriteLine("Im sorry, that is not a valid club, please enter another club to join");
-                            }
-                            validInput = ValidateAddMember(addMember, clubName.ToLower());
+                            validInput = ValidateAddMember(addMember, membershipType);
                         }
                         else
                         {
@@ -66,7 +52,7 @@ namespace FitnessCenter
                     case 6:
                         Console.WriteLine("Current Members are:");
                         List<Member> members = FileManagement.ReadFile();
-                        members.ForEach(x=> Console.WriteLine(x.Name));
+                        members.ForEach(x => Console.WriteLine(x.Name));
                         break;
                     default:
                         break;
@@ -74,7 +60,7 @@ namespace FitnessCenter
             }
             while (validInput == false);
         }
-        
+
         public static bool ValidateAddMember(string readLine)
         {
             try
@@ -90,12 +76,12 @@ namespace FitnessCenter
                 return false;
             }
         }
-        public static bool ValidateAddMember(string readLine, string clubName)
+        public static bool ValidateAddMember(string readLine, string memberType)
         {
             try
             {
                 ManageMember member = new ManageMember();
-                member.AddMember(readLine, clubName);
+                member.AddMember(readLine, memberType);
                 Console.WriteLine($"{readLine} has been successfully added!");
                 return true;
             }
@@ -220,6 +206,11 @@ namespace FitnessCenter
             {
                 return false;
             }
+        }
+
+        public static bool ValidClubName(string clubName, List<Club> clubs)
+        {
+            return clubs.Any(club => club.Name == clubName);
         }
     }
 }
