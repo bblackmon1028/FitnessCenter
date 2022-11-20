@@ -228,7 +228,7 @@ namespace FitnessCenter
 
         public static bool ValidClubName(string clubName, List<Club> clubs)
         {
-            return clubs.Any(club => club.Name == clubName);
+            return clubs.Any(club => club.Name.ToLower() == clubName);
         }
 
     }
