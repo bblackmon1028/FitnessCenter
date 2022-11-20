@@ -212,5 +212,6 @@ namespace FitnessCenter
         {
             return clubs.Any(club => club.Name == clubName);
         }
+
     }
 }
