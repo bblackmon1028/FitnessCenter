@@ -31,12 +31,16 @@ namespace FitnessCenter
                             clubs.Add(new Club("Universe Fitness", "949 E Aurora Rd", "Macedonia"));
 
                             Console.WriteLine("these are the clubs that are availabe to belong to");
-                            // list out club names
+                            foreach (var club in clubs)
+                            {
+                                Console.WriteLine(club.Name);
+                            }
                             Console.WriteLine("Please enter a club that you would like a membership for");
                             string clubName = Console.ReadLine();
-                            while (!ValidClub(clubName.ToLower(), /* club list */))
+                            while (!ValidClubName(clubName.ToLower(), clubs))
                             {
                                 Console.WriteLine("Im sorry, that is not a valid club, please enter another club to join");
+                                clubName = Console.ReadLine();
                             }
                             validInput = ValidateAddMember(addMember, clubName.ToLower());
                         }
