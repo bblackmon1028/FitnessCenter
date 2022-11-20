@@ -24,7 +24,12 @@ namespace FitnessCenter
 
                         if (Convert.ToInt32(membershipType) == 1)
                         {
-                            validInput = ValidateAddMember(addMember, membershipType);
+                            Console.WriteLine("these are the clubs that are availabe to belong to");
+                            // list out club names
+                            Console.WriteLine("Please enter a club that you would like a membership for");
+                            string clubName = Console.ReadLine();
+                            //ClubNameValidator
+                            validInput = ValidateAddMember(addMember, clubName);
                         }
                         else
                         {
@@ -71,12 +76,12 @@ namespace FitnessCenter
                 return false;
             }
         }
-        public static bool ValidateAddMember(string readLine, string memberType)
+        public static bool ValidateAddMember(string readLine, string clubName)
         {
             try
             {
                 ManageMember member = new ManageMember();
-                member.AddMember(readLine, memberType);
+                member.AddMember(readLine, clubName);
                 Console.WriteLine($"{readLine} has been successfully added!");
                 return true;
             }
