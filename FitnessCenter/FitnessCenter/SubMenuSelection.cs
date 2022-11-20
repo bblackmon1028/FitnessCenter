@@ -37,7 +37,7 @@ namespace FitnessCenter
                         }
                         break;
                     case 2:
-                        Console.WriteLine("Please enter the name of the member you would like to remove:");
+                        Console.WriteLine("Please enter the name or ID of the member you would like to remove:");
                         string remove = Console.ReadLine();
                         validInput = ValidateRemoveMember(remove);
                         break;
@@ -54,13 +54,18 @@ namespace FitnessCenter
                         string generateBill = Console.ReadLine();
                         validInput = ValidateGenerateBillInfo(generateBill);
                         break;
+                    case 6:
+                        Console.WriteLine("Current Members are:");
+                        List<Member> members = FileManagement.ReadFile();
+                        members.ForEach(x=> Console.WriteLine(x.Name));
+                        break;
                     default:
                         break;
                 }
             }
             while (validInput == false);
-        
         }
+        
         public static bool ValidateAddMember(string readLine)
         {
             try
@@ -96,13 +101,21 @@ namespace FitnessCenter
             try
             {
                 ManageMember member = new ManageMember();
-                member.RemoveMember(readLine);
+                bool canConvert = int.TryParse(readLine, out int result);
+                if (canConvert)
+                {
+                    member.RemoveMember(result);
+                }
+                else
+                {
+                    member.RemoveMember(readLine);
+                }
                 Console.WriteLine($"{readLine} has been successfully removed.");
                 return true;
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a current member. Press 0 to enter a new name or press 9 to return to main menu:");
+                Console.WriteLine("That is not a current member. Press enter to try again or press 9 to return to main menu.");
                 return ReturnToMainMenu();
             }
         }
@@ -132,7 +145,7 @@ namespace FitnessCenter
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member. Press 0 to enter a new member or press 9 to return to main menu:");
+                Console.WriteLine("That is not a valid member. Press enter to try again or press 9 to return to main menu.");
                 return ReturnToMainMenu();
             }
         }
@@ -174,7 +187,7 @@ namespace FitnessCenter
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member name. Press 0 to enter a new member or press 9 to return to main menu:");
+                Console.WriteLine("That is not a valid member name. Press enter to to try again or press 9 to return to main menu.");
                 return ReturnToMainMenu();
             }
         }
