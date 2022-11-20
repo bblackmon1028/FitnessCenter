@@ -12,7 +12,7 @@ namespace FitnessCenter
         public string Address { get; private set; }
         public string City { get; private set; }
 
-        public void Club (string name, string address, string city)
+        public Club(string name, string address, string city)
         {
             Name = name;
             Address = address;
