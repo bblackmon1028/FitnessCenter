@@ -1,27 +1,42 @@
 ﻿using FitnessCenter;
 
 Console.WriteLine("Welcome to Grand Circus Gym! Unless you die, keep going!");
-Console.WriteLine("\nPlease choose from the following menu options:");
-Console.WriteLine("1. Add Member");
-Console.WriteLine("2. Remove Member");
-Console.WriteLine("3. Display Member Information");
-Console.WriteLine("4. Check Into Club");
-Console.WriteLine("5. Check Membership Fee & Points");
-string userAnswer = Console.ReadLine();
+while (true)
+{
+    Console.WriteLine("\nPlease choose from the following menu options:");
+    Console.WriteLine("1. Add Member");
+    Console.WriteLine("2. Remove Member");
+    Console.WriteLine("3. Display Member Information");
+    Console.WriteLine("4. Check Into Club");
+    Console.WriteLine("5. Generate Bill Of Fees");
+    Console.WriteLine("6. Exit");
+    string userAnswer = Console.ReadLine();
+    SubMenuSelection.DisplaySelectedSubMenu(ValidateMenuSelection(userAnswer));
 
-SubMenuSelection.DisplaySelectedSubMenu(ValidateMenuSelection(userAnswer));
-
+    if(ValidateMenuSelection(userAnswer) == -1)
+    {
+        Console.WriteLine("That is not a valid selection. Please try again.");
+    }
+    if (ValidateMenuSelection(userAnswer) == 6)
+    {
+        Console.WriteLine("Hustle for that muscle. Goodbye!");
+        Environment.Exit(0);
+    }
+}
 
 int ValidateMenuSelection(string option)
 {
     try
     {
         int userSelection = Convert.ToInt32(option);
+        if(userSelection > 6 || userSelection < 1)
+        {
+            return -1;
+        }
         return userSelection;
     }
-    catch (ArithmeticException)
+    catch (System.FormatException)
     {
-        Console.WriteLine("That is not a valid selection. Please try again.");
         return -1;
     }
 }

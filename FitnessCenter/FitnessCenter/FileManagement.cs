@@ -13,6 +13,7 @@ namespace FitnessCenter
         public const string FilePathMember = @"C:\stuff\FitnessMembers.txt";
         public static void WriteFile(List<Member> members)
         {
+            CreateDataFileIfNotExists();
             StreamWriter sw = new StreamWriter(FilePathMember);
             
             foreach (var member in members)
@@ -25,13 +26,13 @@ namespace FitnessCenter
                 {
                     sw.WriteLine($"{"S"}|{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
                 }
-                
             }
-            
             sw.Close();
         }
+
         public static List<Member> ReadFile()
         {
+            CreateDataFileIfNotExists();
             StreamReader sr = new StreamReader(FilePathMember);
             List<Member> members = new List<Member>();
             List<SingleClubMember> singleClubMembers = new List<SingleClubMember>();
@@ -68,10 +69,7 @@ namespace FitnessCenter
                     };
                     multiClubMembers.Add(multiClubMember);
                 }
-
-
             }
-
             foreach (var member in multiClubMembers)
             {
                 members.Add(member);
@@ -80,8 +78,16 @@ namespace FitnessCenter
             {
                 members.Add(member);
             }
-
+            sr.Close();
             return members;
+        }
+
+        private static void CreateDataFileIfNotExists()
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(FilePathMember)))
+                Directory.CreateDirectory(Path.GetDirectoryName(FilePathMember));
+            if (!File.Exists(FilePathMember))
+                File.Create(FilePathMember).Dispose();
         }
     }
 }
