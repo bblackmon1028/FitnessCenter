@@ -25,12 +25,12 @@ namespace FitnessCenter
                         validInput = ValidateMemberShipType(memberName, membershipType);
                         break;
                     case 2:
-                        Console.WriteLine("Please enter the name or ID of the member you would like to remove:");
+                        Console.WriteLine("Please enter the ID of the member you would like to remove:");
                         string remove = Console.ReadLine();
                         validInput = ValidateRemoveMember(remove);
                         break;
                     case 3:
-                        Console.WriteLine("Please enter the name or ID of the member info you would like to display:");
+                        Console.WriteLine("Please enter the ID of the member information you would like to display:");
                         string display = Console.ReadLine();
                         validInput = ValidateDisplayMemberInfo(display);
                         break;
@@ -39,7 +39,6 @@ namespace FitnessCenter
                         string memberId = Console.ReadLine();
                         Console.WriteLine("Please select the club you would like to check into");
                         DisplayAvailableClubs();
-                        //need to read line and then validate club info
                         validInput = ValidateCheckIntoClub(memberId);
                         break;
                     case 5:
@@ -171,10 +170,6 @@ namespace FitnessCenter
                 {
                     member.RemoveMember(result);
                 }
-                else
-                {
-                    member.RemoveMember(userSelection);
-                }
                 Console.WriteLine($"{userSelection} has been successfully removed.");
                 return true;
             }
@@ -230,17 +225,14 @@ namespace FitnessCenter
                 if (canConvert)
                 {
                     member.GetMember(ID).CheckIn(club);
-                    {
-
-                    }
-
+                    Console.WriteLine($"You have successfully checked into {club.Name}!");
                 }
                 return true;
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member ID. Press enter to try again or press 9 to return to the main menu.");
-                return false;
+                Console.WriteLine("Member does not belong to selected club. Press enter to try again or press 9 to return to the main menu.");
+                return ReturnToMainMenu();
             }
         }
 

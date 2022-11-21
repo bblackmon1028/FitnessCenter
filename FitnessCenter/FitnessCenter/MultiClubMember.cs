@@ -14,6 +14,7 @@ namespace FitnessCenter
             Id = id;
             Name = name;
             Fee = 12;
+            MemberPoints = 100;
         }
         public MultiClubMember()
         {
@@ -22,7 +23,7 @@ namespace FitnessCenter
 
         public override void CheckIn(Club club)
         {
-            MemberPoints++;
+            MemberPoints += 50;
         }
     }
 }

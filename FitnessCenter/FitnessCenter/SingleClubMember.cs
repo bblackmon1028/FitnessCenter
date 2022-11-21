@@ -23,15 +23,10 @@ namespace FitnessCenter
         }
         public override void CheckIn(Club club)
         {
-            if (club.Name == ClubMember)
+            if (club.Name != ClubMember)
             {
-                Console.WriteLine("Member has been checked in!");
+                throw new Exception("member does not belong to input club");
             }
-            else
-            {
-                Console.WriteLine("Member does not belong to this club.");
-            }
-
         }
     }
 }
