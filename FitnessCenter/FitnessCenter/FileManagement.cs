@@ -24,7 +24,8 @@ namespace FitnessCenter
                 }
                 if (member is SingleClubMember)
                 {
-                    sw.WriteLine($"{"Single"}|{member.Fee}|{member.Name}|{member.Id}|{member.ClubMember}");
+                    var singleClubMember = member as SingleClubMember;
+                    sw.WriteLine($"{"Single"}|{member.Fee}|{member.Name}|{member.Id}|{singleClubMember.ClubMember}");
                 }
             }
             sw.Close();

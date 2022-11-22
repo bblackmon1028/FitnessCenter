@@ -11,8 +11,6 @@ namespace FitnessCenter
         public double Fee { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public string ClubMember { get; set; }
-
         public abstract void CheckIn(Club club);
     }
 }
