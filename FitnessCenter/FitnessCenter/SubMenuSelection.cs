@@ -12,6 +12,7 @@ namespace FitnessCenter
     {
         public static void DisplaySelectedSubMenu(int userAnswer)
         {
+            ManageMember manageMember = new ManageMember();
             switch (userAnswer)
             {
                 case 1:
@@ -34,21 +35,20 @@ namespace FitnessCenter
                         membershipType = Console.ReadLine();
                     }
 
-                    ManageMember manageMember = new ManageMember();
                     if (Convert.ToInt32(membershipType) == 1)
                     {
                         Console.WriteLine("Please select a club to join:");
                         DisplayAvailableClubs();
                         string selectedClub = Console.ReadLine();
-                        while (!ValidateClubInput(selectedClub))
+                        while (!ValidateClubSelection(selectedClub))
                         {
                             Console.WriteLine("That is not a valid club. Please try again.");
                             DisplayAvailableClubs();
                             selectedClub = Console.ReadLine();
-                            Club club = GetSelectedClub(Convert.ToInt32(selectedClub));
-                            manageMember.AddMember(memberName, club);
-                            Console.WriteLine($"{memberName} has been successfully added to {club.Name}!");
                         }
+                        Club club = GetSelectedClub(Convert.ToInt32(selectedClub));
+                        manageMember.AddMember(memberName, club);
+                        Console.WriteLine($"{memberName} has been successfully added to {club.Name}!");
                     }
                     else
                     {
@@ -66,10 +66,9 @@ namespace FitnessCenter
                         Console.WriteLine("Please enter the ID of the member you would like to remove:");
                         removeMemberId = Console.ReadLine();
                     }
-                    ManageMember manageMember2 = new ManageMember();
-                    manageMember2.RemoveMember(Convert.ToInt32(removeMemberId));
                     Member memberInfo = GetMemberInfo(Convert.ToInt32(removeMemberId));
-                    Console.WriteLine($"{memberInfo.Id}: {memberInfo.Name} has been successfully removed.");
+                    manageMember.RemoveMember(Convert.ToInt32(removeMemberId));
+                    Console.WriteLine($"Member #{memberInfo.Id}: {memberInfo.Name} has been successfully removed.");
                     break;
                 case 3:
                     Console.WriteLine("Please enter the ID of the member information you would like to display:");
@@ -83,25 +82,24 @@ namespace FitnessCenter
                     }
 
                     Member requestedMember = GetMemberInfo(Convert.ToInt32(displayMemberId));
-
+                    string clubText = string.Empty;
                     if (requestedMember is SingleClubMember)
                     {
                         var singleClubMember = requestedMember as SingleClubMember;
-                        Console.WriteLine($"Name:{requestedMember.Name}" +
-                    $"\nId Number: {requestedMember.Id}" +
-                    $"\nMember Fee:{requestedMember.Fee:C}" +
-                    $"\nMembership Type: Single Club Member" +
-                    $"\nMember's Club: {singleClubMember.ClubMember}");
+                        clubText = $"Member's Club: {singleClubMember.ClubMember}";
                     }
                     else
                     {
                         var multiClubMember = requestedMember as MultiClubMember;
-                        Console.WriteLine($"Name:{requestedMember.Name}" +
+                        clubText = $"Membership Points: {multiClubMember.MemberPoints}";
+                    }
+
+                    Console.WriteLine($"Name: {requestedMember.Name}" +
                     $"\nId Number: {requestedMember.Id}" +
                     $"\nMember Fee: {requestedMember.Fee:C}" +
                     $"\nMembership Type: Multi-Club Member" +
-                    $"\nMembership Points: {multiClubMember.MemberPoints}");
-                    }
+                    $"\n{clubText}");
+
                     break;
                 case 4:
                     Console.WriteLine("Please enter the ID of the member checking in:");
@@ -118,18 +116,16 @@ namespace FitnessCenter
                     DisplayAvailableClubs();
                     string clubChoice = Console.ReadLine();
 
-                    while (!ValidateClubInput(clubChoice))
+                    while (!ValidateClubCheckIn(clubChoice, Convert.ToInt32(memberId)))
                     {
-                        Console.WriteLine("That is not a valid club choice. Please try again.");
                         Console.WriteLine("Please select the club you are checking into:");
                         DisplayAvailableClubs();
                         clubChoice = Console.ReadLine();
                     }
-                    if (CheckIntoClub(Convert.ToInt32(memberId), Convert.ToInt32(clubChoice)) == true)
-                    {
-                        Member checkInMember = GetMemberInfo(Convert.ToInt32(memberId));
-                        Console.WriteLine($"{checkInMember.Name} was successfully checked into {clubChoice}.");
-                    };
+
+                    CheckIntoClub(Convert.ToInt32(memberId), Convert.ToInt32(clubChoice));
+                    Member checkInMember = GetMemberInfo(Convert.ToInt32(memberId));
+                    Console.WriteLine($"{checkInMember.Name} was successfully checked into {clubChoice}.");
                     break;
                 case 5:
                     Console.WriteLine("Please enter the name or ID of the member you would like to generate a bill for:");
@@ -143,7 +139,7 @@ namespace FitnessCenter
                     }
                     Member billMember = GetMemberInfo(Convert.ToInt32(memberIdForBill));
                     Console.WriteLine($"Name: {billMember.Name}" +
-                        $"Monthly Membership Fee: {billMember.Fee:C}");
+                        $"\nMonthly Membership Fee: {billMember.Fee:C}");
                     break;
                 case 6:
                     Console.WriteLine("Current Members are:");
@@ -211,22 +207,30 @@ namespace FitnessCenter
             }
         }
 
-        public static bool ValidateClubInput(string clubSelection)
+        public static bool ValidateClubCheckIn(string clubSelection, int memberID)
+        {
+            if (!ValidateClubSelection(clubSelection) ||
+                !CheckIntoClub(memberID, Convert.ToInt32(clubSelection)))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ValidateClubSelection(string clubSelection)
         {
             try
             {
                 int.TryParse(clubSelection, out int convertedClubSelection);
-                if (convertedClubSelection < 4 && convertedClubSelection > 0)
+                if (convertedClubSelection <= 4 && convertedClubSelection > 0)
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+                throw new Exception();
             }
             catch (Exception)
             {
+                Console.WriteLine("That is not a valid club choice. Please try again.");
                 return false;
             }
         }
@@ -256,14 +260,13 @@ namespace FitnessCenter
             {
                 ManageMember memberManager = new ManageMember();
                 Club club = GetSelectedClub(clubSelection);
-                memberManager.GetMember(memberID).CheckIn(club);
-                FileManagement.WriteFile(memberManager.Members);
+                memberManager.GetMember(memberID)
+                             .CheckIn(club);
                 return true;
-
             }
             catch (Exception)
             {
-                Console.WriteLine("Member does not belong to selected club. Please try again.");
+                Console.WriteLine("Check in unsuccessful. Member does not belong to specified club.");
                 return false;
             }
         }
