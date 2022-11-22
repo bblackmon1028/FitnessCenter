@@ -262,11 +262,14 @@ namespace FitnessCenter
             Club club = SelectClub();
             try
             {
-                ManageMember member = new ManageMember();
+                ManageMember memberManager = new ManageMember();
+                
+                
                 bool canConvert = int.TryParse(memberID, out int ID);
                 if (canConvert)
                 {
-                    member.GetMember(ID).CheckIn(club);
+                    memberManager.GetMember(ID).CheckIn(club);
+                    FileManagement.WriteFile(memberManager.Members);
                     Console.WriteLine($"You have successfully checked into {club.Name}!");
                 }
                 return true;
@@ -282,11 +285,11 @@ namespace FitnessCenter
         {
             try
             {
-                ManageMember member = new ManageMember();
+                ManageMember memberManager = new ManageMember();
                 bool canConvert = int.TryParse(userSelection, out int result);
                 if (canConvert)
                 {
-                    Member requestedMember = member.GetMember(result);
+                    Member requestedMember = memberManager.GetMember(result);
                     Console.WriteLine($"Name: {requestedMember.Name}" +
                         $"\nMember Fee: {requestedMember.Fee:C}");
                 }
