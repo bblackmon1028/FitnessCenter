@@ -20,6 +20,7 @@ while (true)
     else if (itemNum == 7)
     {
         Console.WriteLine("Hustle for that muscle. Goodbye!");
+        Console.ReadKey();
         Environment.Exit(0);
     }
     else
