@@ -34,50 +34,46 @@ namespace FitnessCenter
                             validInput = ValidateMemberShipType(memberName, membershipType);
                         }
                         while (!validInput);
-                        ClearDisplay();
                         break;
                     case 2:
                         Console.WriteLine("Please enter the ID of the member you would like to remove:");
                         string remove = Console.ReadLine();
                         validInput = ValidateRemoveMember(remove);
-                        ClearDisplay();
                         break;
                     case 3:
                         Console.WriteLine("Please enter the ID of the member information you would like to display:");
                         string display = Console.ReadLine();
                         validInput = ValidateDisplayMemberInfo(display);
-                        ClearDisplay();
                         break;
                     case 4:
                         Console.WriteLine("Please enter the ID of the member checking in:");
                         string memberId = Console.ReadLine();
-                        do
+
+                        if (ValidateCheckIntoClub(memberId) == false)
                         {
-                            Console.WriteLine("Please select the club you would like to check into");
-                            DisplayAvailableClubs();
+                            validInput = false;
+                            continue;
                         }
-                        while (!validInput);
-                        validInput = ValidateCheckIntoClub(memberId);
-                        ClearDisplay();
+                        validInput = true;
                         break;
                     case 5:
                         Console.WriteLine("Please enter the name or ID of the member you would like to generate bill for:");
                         string generateBill = Console.ReadLine();
                         validInput = ValidateGenerateBillInfo(generateBill);
-                        ClearDisplay();
                         break;
                     case 6:
                         Console.WriteLine("Current Members are:");
                         List<Member> members = FileManagement.ReadFile();
                         var memberbyId = members.OrderBy(x => x.Name).ToList();
                         memberbyId.ForEach(x => Console.WriteLine($"Id:{x.Id,-2} | Name: {x.Name}"));
-                        ClearDisplay();
                         break;
                     default:
                         break;
                 }
             }
             while (validInput == false);
+
+            ClearDisplay();
         }
 
         public static bool ValidateMemberName(string memberName)
@@ -129,14 +125,12 @@ namespace FitnessCenter
                 ManageMember member = new ManageMember();
                 if (Convert.ToInt32(userSelection) == 1)
                 {
-                    Console.WriteLine("Please select your club:");
-                    DisplayAvailableClubs();
                     Club club = SelectClub();
                     member.AddMember(userName, club);
                     Console.WriteLine($"{userName} has been successfully added to {club.Name}!");
                     return true;
                 }
-                else if(Convert.ToInt32(userSelection) == 2)
+                else if (Convert.ToInt32(userSelection) == 2)
                 {
                     member.AddMember(userName);
                     Console.WriteLine($"{userName} has been successfully added!");
@@ -156,7 +150,9 @@ namespace FitnessCenter
         }
         public static Club SelectClub()
         {
+            Console.WriteLine("Please select a club:");
             List<Club> clubs = GetAvailableClubList();
+            DisplayAvailableClubs();
             string selectedClub = Console.ReadLine();
             int convertedClubSelection = ConvertClubSelectionToInt(selectedClub);
 
@@ -224,7 +220,7 @@ namespace FitnessCenter
             {
                 ManageMember member = new ManageMember();
                 bool canConvert = int.TryParse(userSelection, out int result);
-                if (canConvert)
+                if (member.GetMember(result) != null)   
                 {
                     Member requestedMember = member.GetMember(result);
 
@@ -259,20 +255,24 @@ namespace FitnessCenter
 
         public static bool ValidateCheckIntoClub(string memberID)
         {
-            Club club = SelectClub();
             try
             {
                 ManageMember memberManager = new ManageMember();
-                
-                
+
                 bool canConvert = int.TryParse(memberID, out int ID);
                 if (canConvert)
                 {
+                    Club club = SelectClub();
                     memberManager.GetMember(ID).CheckIn(club);
                     FileManagement.WriteFile(memberManager.Members);
                     Console.WriteLine($"You have successfully checked into {club.Name}!");
+                    return true;
                 }
-                return true;
+                else
+                {
+                    Console.WriteLine("That is not a valid ID. Please enter a valid ID.");
+                    return false;
+                }
             }
             catch (Exception)
             {
