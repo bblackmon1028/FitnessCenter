@@ -44,19 +44,7 @@ namespace FitnessCenter
             }
             else throw new Exception("Unable to remove member");
         }
-
-        public void RemoveMember(string memberName)
-        {
-            Member member = GetMember(memberName);
-
-            if (member != null)
-            {
-                Members.Remove(member);
-                FileManagement.WriteFile(Members);
-            }
-            else throw new Exception("Unable to remove member");
-        }
-        
+                
         public Member GetMember(int id)
         {
             try
