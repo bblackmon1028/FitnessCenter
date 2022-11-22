@@ -12,76 +12,174 @@ namespace FitnessCenter
     {
         public static void DisplaySelectedSubMenu(int userAnswer)
         {
-            bool validInput = true;
-            do
+            switch (userAnswer)
             {
-                switch (userAnswer)
-                {
-                    case 1:
-                        Console.WriteLine("Please enter the name of the member you would like to add:");
-                        string memberName = Console.ReadLine();
+                case 1:
+                    Console.WriteLine("Please enter the name of the member you would like to add:");
+                    string memberName = Console.ReadLine();
 
-                        if (!ValidNameInput(memberName))
-                        {
-                            Console.WriteLine("That is not a valid member name. Please try again.");
-                            validInput = false;
-                            continue;
-                        }
+                    while (!ValidNameInput(memberName))
+                    {
+                        Console.WriteLine("That is not a valid member name. Please try again.");
+                        memberName = Console.ReadLine();
+                    }
 
-                        do
+                    Console.WriteLine("Please select a membership type:\n1.Single\n2.Multi-Club");
+                    string membershipType = Console.ReadLine();
+
+                    while (!ValidMemberTypeInput(membershipType))
+                    {
+                        Console.WriteLine("That is not a valid membership type. Please try again.");
+                        Console.WriteLine("Please select a membership type:\n1.Single\n2.Multi-Club");
+                        membershipType = Console.ReadLine();
+                    }
+
+                    ManageMember manageMember = new ManageMember();
+                    if (Convert.ToInt32(membershipType) == 1)
+                    {
+                        Console.WriteLine("Please select a club to join:");
+                        DisplayAvailableClubs();
+                        string selectedClub = Console.ReadLine();
+                        while (!ValidateClubInput(selectedClub))
                         {
-                            Console.WriteLine("Please select a membership type:\n1.Single\n2.Multi-Club");
-                            string membershipType = Console.ReadLine();
-                            validInput = ValidMemberTypeInput(memberName, membershipType, out membershipType);
-                            if (validInput && out int Vali == 1)
-                            {
-                                Console.WriteLine("Please select a club to join:");
-                                DisplayAvailableClubs();
-                                string selectedClub = Console.ReadLine();
-                                validInput = ValidateClubInput(selectedClub);
-                            }
+                            Console.WriteLine("That is not a valid club. Please try again.");
+                            DisplayAvailableClubs();
+                            selectedClub = Console.ReadLine();
+                            Club club = GetSelectedClub(Convert.ToInt32(selectedClub));
+                            manageMember.AddMember(memberName, club);
+                            Console.WriteLine($"{memberName} has been successfully added to {club.Name}!");
                         }
-                        while (!validInput);
-                        break;
-                    case 2:
+                    }
+                    else
+                    {
+                        manageMember.AddMember(memberName);
+                        Console.WriteLine($"{memberName} has been successfully added as a Multi-Club member!");
+                    }
+                    break;
+                case 2:
+                    Console.WriteLine("Please enter the ID of the member you would like to remove:");
+                    string removeMemberId = Console.ReadLine();
+
+                    while (!ValidateMemberID(removeMemberId))
+                    {
+                        Console.WriteLine("That is not a valid member ID. Please try again.");
                         Console.WriteLine("Please enter the ID of the member you would like to remove:");
-                        string remove = Console.ReadLine();
-                        validInput = ValidateRemoveMember(remove);
-                        break;
-                    case 3:
+                        removeMemberId = Console.ReadLine();
+                    }
+                    ManageMember manageMember2 = new ManageMember();
+                    manageMember2.RemoveMember(Convert.ToInt32(removeMemberId));
+                    Member memberInfo = GetMemberInfo(Convert.ToInt32(removeMemberId));
+                    Console.WriteLine($"{memberInfo.Id}: {memberInfo.Name} has been successfully removed.");
+                    break;
+                case 3:
+                    Console.WriteLine("Please enter the ID of the member information you would like to display:");
+                    string displayMemberId = Console.ReadLine();
+
+                    while (!ValidateMemberID(displayMemberId))
+                    {
+                        Console.WriteLine("That is not a valid member ID. Please try again.");
                         Console.WriteLine("Please enter the ID of the member information you would like to display:");
-                        string display = Console.ReadLine();
-                        validInput = ValidateDisplayMemberInfo(display);
-                        break;
-                    case 4:
+                        displayMemberId = Console.ReadLine();
+                    }
+
+                    Member requestedMember = GetMemberInfo(Convert.ToInt32(displayMemberId));
+
+                    if (requestedMember is SingleClubMember)
+                    {
+                        var singleClubMember = requestedMember as SingleClubMember;
+                        Console.WriteLine($"Name:{requestedMember.Name}" +
+                    $"\nId Number: {requestedMember.Id}" +
+                    $"\nMember Fee:{requestedMember.Fee:C}" +
+                    $"\nMembership Type: Single Club Member" +
+                    $"\nMember's Club: {singleClubMember.ClubMember}");
+                    }
+                    else
+                    {
+                        var multiClubMember = requestedMember as MultiClubMember;
+                        Console.WriteLine($"Name:{requestedMember.Name}" +
+                    $"\nId Number: {requestedMember.Id}" +
+                    $"\nMember Fee: {requestedMember.Fee:C}" +
+                    $"\nMembership Type: Multi-Club Member" +
+                    $"\nMembership Points: {multiClubMember.MemberPoints}");
+                    }
+                    break;
+                case 4:
+                    Console.WriteLine("Please enter the ID of the member checking in:");
+                    string memberId = Console.ReadLine();
+
+                    while (!ValidateMemberID(memberId))
+                    {
+                        Console.WriteLine("That is not a valid member ID. Please try again.");
                         Console.WriteLine("Please enter the ID of the member checking in:");
-                        string memberId = Console.ReadLine();
+                        memberId = Console.ReadLine();
+                    }
 
-                        if (ValidateCheckIntoClub(memberId) == false)
-                        {
-                            validInput = false;
-                            continue;
-                        }
-                        validInput = true;
-                        break;
-                    case 5:
-                        Console.WriteLine("Please enter the name or ID of the member you would like to generate bill for:");
-                        string generateBill = Console.ReadLine();
-                        validInput = ValidateGenerateBillInfo(generateBill);
-                        break;
-                    case 6:
-                        Console.WriteLine("Current Members are:");
-                        List<Member> members = FileManagement.ReadFile();
-                        var memberbyId = members.OrderBy(x => x.Name).ToList();
-                        memberbyId.ForEach(x => Console.WriteLine($"Id:{x.Id,-2} | Name: {x.Name}"));
-                        break;
-                    default:
-                        break;
-                }
+                    Console.WriteLine("Please select the club you are checking into:");
+                    DisplayAvailableClubs();
+                    string clubChoice = Console.ReadLine();
+
+                    while (!ValidateClubInput(clubChoice))
+                    {
+                        Console.WriteLine("That is not a valid club choice. Please try again.");
+                        Console.WriteLine("Please select the club you are checking into:");
+                        DisplayAvailableClubs();
+                        clubChoice = Console.ReadLine();
+                    }
+                    if (CheckIntoClub(Convert.ToInt32(memberId), Convert.ToInt32(clubChoice)) == true)
+                    {
+                        Member checkInMember = GetMemberInfo(Convert.ToInt32(memberId));
+                        Console.WriteLine($"{checkInMember.Name} was successfully checked into {clubChoice}.");
+                    };
+                    break;
+                case 5:
+                    Console.WriteLine("Please enter the name or ID of the member you would like to generate a bill for:");
+                    string memberIdForBill = Console.ReadLine();
+
+                    while (!ValidateMemberID(memberIdForBill))
+                    {
+                        Console.WriteLine("That is not a valid member ID. Please try again.");
+                        Console.WriteLine("Please enter the name or ID of the member you would like to generate a bill for:");
+                        memberIdForBill = Console.ReadLine();
+                    }
+                    Member billMember = GetMemberInfo(Convert.ToInt32(memberIdForBill));
+                    Console.WriteLine($"Name: {billMember.Name}" +
+                        $"Monthly Membership Fee: {billMember.Fee:C}");
+                    break;
+                case 6:
+                    Console.WriteLine("Current Members are:");
+                    List<Member> members = FileManagement.ReadFile();
+                    var memberbyId = members.OrderBy(x => x.Name).ToList();
+                    memberbyId.ForEach(x => Console.WriteLine($"Id:{x.Id,-2} | Name: {x.Name}"));
+                    break;
+                default:
+                    break;
             }
-            while (validInput == false);
-
             ClearDisplay();
+        }
+
+        public static Member GetMemberInfo(int ID)
+        {
+            ManageMember manageMember = new ManageMember();
+            Member requestedMember = manageMember.GetMember(ID);
+            return requestedMember;
+        }
+
+        public static bool ValidateMemberID(string membID)
+        {
+            try
+            {
+                int ID = int.Parse(membID);
+                ManageMember manageMember = new ManageMember();
+                if (manageMember.GetMember(ID) == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public static bool ValidNameInput(string memberName)
@@ -93,83 +191,42 @@ namespace FitnessCenter
             return true;
         }
 
-        public static bool ValidateAddMember(string userSelection)
-        {
-            try
-            {
-                ManageMember member = new ManageMember();
-                member.AddMember(userSelection);
-                Console.WriteLine($"{userSelection} has been successfully added!");
-                return true;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Member can't be added at this time. Please try again.");
-                return false;
-            }
-        }
-
-        public static bool ValidateAddMember(string userSelection, Club club)
-        {
-            try
-            {
-                ManageMember member = new ManageMember();
-                member.AddMember(userSelection, club);
-                Console.WriteLine($"{userSelection} has been successfully added to {club.Name}!");
-                return true;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Member can't be added at this time. Please try again.");
-                return false;
-            }
-        }
-
-        public static bool ValidMemberTypeInput(string userName, string userSelection, out int memberType)
+        public static bool ValidMemberTypeInput(string userSelection)
         {
             try
             {
                 int.TryParse(userSelection, out int clubSelection);
                 if (clubSelection == 1 || clubSelection == 2)
                 {
-                    memberType = clubSelection;
                     return true;
                 }
                 else
                 {
-                    Console.WriteLine("That is not a valid selection. Press any key to try again or press 9 to return to the main menu.");
-                    memberType = -1;
-                    return ReturnToMainMenu();
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("That is not a valid selection. Press any key to try again or press 9 to return to the main menu.");
-                memberType = -1;
-                return ReturnToMainMenu();
-            }
-        }
-        public static bool ValidateClubInput(string clubSelection, out int clubSelectionToInt)
-        {
-            try
-            {
-                int.TryParse(clubSelection, out int convertedClubSelection);
-                if (convertedClubSelection > 4 || convertedClubSelection <= 0)
-                {
-                    clubSelectionToInt = convertedClubSelection;
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("That is not a valid club selection. Please try again.");
-                    clubSelectionToInt = -1;
                     return false;
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid club selection. Please try again.");
-                clubSelectionToInt = -1;
+                return false;
+            }
+        }
+
+        public static bool ValidateClubInput(string clubSelection)
+        {
+            try
+            {
+                int.TryParse(clubSelection, out int convertedClubSelection);
+                if (convertedClubSelection < 4 && convertedClubSelection > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }
@@ -193,134 +250,20 @@ namespace FitnessCenter
             }
         }
 
-
-        public static bool ValidateRemoveMember(string userSelection)
-        {
-            try
-            {
-                ManageMember member = new ManageMember();
-                bool canConvert = int.TryParse(userSelection, out int result);
-                var getMember = member.GetMember(result);
-                if (canConvert)
-                {
-                    member.RemoveMember(result);
-                }
-                Console.WriteLine($"{getMember.Name} has been successfully removed.");
-                return true;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("That is not a current member. Press enter to try again or press 9 to return to main menu.");
-                return ReturnToMainMenu();
-            }
-        }
-
-        public static bool ValidateDisplayMemberInfo(string userSelection)
-        {
-            try
-            {
-                ManageMember member = new ManageMember();
-                bool canConvert = int.TryParse(userSelection, out int result);
-                if (member.GetMember(result) != null)
-                {
-                    Member requestedMember = member.GetMember(result);
-
-                    if (requestedMember is SingleClubMember)
-                    {
-                        var singleClubMember = requestedMember as SingleClubMember;
-                        Console.WriteLine($"Name:{requestedMember.Name}" +
-                    $"\nId Number: {requestedMember.Id}" +
-                    $"\nMember Fee:{requestedMember.Fee:C}" +
-                    $"\nMembership Type: Single Club Member" +
-                    $"\nMember's Club: {singleClubMember.ClubMember}");
-
-                    }
-                    else
-                    {
-                        var multiClubMember = requestedMember as MultiClubMember;
-                        Console.WriteLine($"Name:{requestedMember.Name}" +
-                    $"\nId Number: {requestedMember.Id}" +
-                    $"\nMember Fee: {requestedMember.Fee:C}" +
-                    $"\nMembership Type: Multi-Club Member" +
-                    $"\nMembership Points: {multiClubMember.MemberPoints}");
-                    }
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("That is not a valid member. Press enter to try again or press 9 to return to main menu.");
-                return ReturnToMainMenu();
-            }
-        }
-
-        public static bool ValidateCheckIntoClub(string memberID)
+        public static bool CheckIntoClub(int memberID, int clubSelection)
         {
             try
             {
                 ManageMember memberManager = new ManageMember();
-
-                bool canConvert = int.TryParse(memberID, out int ID);
-                if (canConvert)
-                {
-                    Club club = ValidateClubInput();
-                    memberManager.GetMember(ID).CheckIn(club);
-                    FileManagement.WriteFile(memberManager.Members);
-                    Console.WriteLine($"You have successfully checked into {club.Name}!");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("That is not a valid ID. Please enter a valid ID.");
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Member does not belong to selected club. Press enter to try again or press 9 to return to the main menu.");
-                return ReturnToMainMenu();
-            }
-        }
-
-        public static bool ValidateGenerateBillInfo(string userSelection)
-        {
-            try
-            {
-                ManageMember memberManager = new ManageMember();
-                bool canConvert = int.TryParse(userSelection, out int result);
-                if (canConvert)
-                {
-                    Member requestedMember = memberManager.GetMember(result);
-                    Console.WriteLine($"Name: {requestedMember.Name}" +
-                        $"\nMember Fee: {requestedMember.Fee:C}");
-                }
+                Club club = GetSelectedClub(clubSelection);
+                memberManager.GetMember(memberID).CheckIn(club);
+                FileManagement.WriteFile(memberManager.Members);
                 return true;
+
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid member name. Press enter to to try again or press 9 to return to main menu.");
-                return ReturnToMainMenu();
-            }
-        }
-
-        public static bool ReturnToMainMenu()
-        {
-            string catchResponse = Console.ReadLine();
-
-            try
-            {
-                if (Convert.ToInt32(catchResponse) == 9)
-                {
-                    Console.Clear();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
+                Console.WriteLine("Member does not belong to selected club. Please try again.");
                 return false;
             }
         }

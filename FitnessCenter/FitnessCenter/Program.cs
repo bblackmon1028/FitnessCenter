@@ -12,16 +12,19 @@ while (true)
     Console.WriteLine("6. Display All Current Members");
     Console.WriteLine("7. Exit");
     string userAnswer = Console.ReadLine();
-    SubMenuSelection.DisplaySelectedSubMenu(ValidateMenuSelection(userAnswer));
-
-    if(ValidateMenuSelection(userAnswer) == -1)
+    int itemNum = ValidateMenuSelection(userAnswer);
+    if (itemNum == - 1)
     {
         Console.WriteLine("That is not a valid selection. Please try again.");
     }
-    if (ValidateMenuSelection(userAnswer) == 7)
+    else if (itemNum == 7)
     {
         Console.WriteLine("Hustle for that muscle. Goodbye!");
         Environment.Exit(0);
+    }
+    else
+    {
+        SubMenuSelection.DisplaySelectedSubMenu(ValidateMenuSelection(userAnswer));
     }
 }
 
@@ -30,7 +33,7 @@ int ValidateMenuSelection(string option)
     try
     {
         int userSelection = Convert.ToInt32(option);
-        if(userSelection > 7 || userSelection < 1)
+        if (userSelection > 7 || userSelection < 1)
         {
             return -1;
         }
