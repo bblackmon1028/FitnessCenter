@@ -42,7 +42,6 @@ namespace FitnessCenter
                         string selectedClub = Console.ReadLine();
                         while (!ValidateClubSelection(selectedClub))
                         {
-                            Console.WriteLine("That is not a valid club. Please try again.");
                             DisplayAvailableClubs();
                             selectedClub = Console.ReadLine();
                         }
