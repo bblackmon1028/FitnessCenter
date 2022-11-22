@@ -21,8 +21,9 @@ namespace FitnessCenter
                         Console.WriteLine("Please enter the name of the member you would like to add:");
                         string memberName = Console.ReadLine();
 
-                        if (ValidateMemberName(memberName) == false)
+                        if (!ValidNameInput(memberName))
                         {
+                            Console.WriteLine("That is not a valid member name. Please try again.");
                             validInput = false;
                             continue;
                         }
@@ -31,7 +32,14 @@ namespace FitnessCenter
                         {
                             Console.WriteLine("Please select a membership type:\n1.Single\n2.Multi-Club");
                             string membershipType = Console.ReadLine();
-                            validInput = ValidateMemberShipType(memberName, membershipType);
+                            validInput = ValidMemberTypeInput(memberName, membershipType, out membershipType);
+                            if (validInput && out int Vali == 1)
+                            {
+                                Console.WriteLine("Please select a club to join:");
+                                DisplayAvailableClubs();
+                                string selectedClub = Console.ReadLine();
+                                validInput = ValidateClubInput(selectedClub);
+                            }
                         }
                         while (!validInput);
                         break;
@@ -76,11 +84,10 @@ namespace FitnessCenter
             ClearDisplay();
         }
 
-        public static bool ValidateMemberName(string memberName)
+        public static bool ValidNameInput(string memberName)
         {
             if (string.IsNullOrEmpty(memberName))
             {
-                Console.WriteLine("That is not a valid member name. Please try again.");
                 return false;
             }
             return true;
@@ -118,53 +125,59 @@ namespace FitnessCenter
             }
         }
 
-        public static bool ValidateMemberShipType(string userName, string userSelection)
+        public static bool ValidMemberTypeInput(string userName, string userSelection, out int memberType)
         {
             try
             {
-                ManageMember member = new ManageMember();
-                if (Convert.ToInt32(userSelection) == 1)
+                int.TryParse(userSelection, out int clubSelection);
+                if (clubSelection == 1 || clubSelection == 2)
                 {
-                    Club club = SelectClub();
-                    member.AddMember(userName, club);
-                    Console.WriteLine($"{userName} has been successfully added to {club.Name}!");
-                    return true;
-                }
-                else if (Convert.ToInt32(userSelection) == 2)
-                {
-                    member.AddMember(userName);
-                    Console.WriteLine($"{userName} has been successfully added!");
+                    memberType = clubSelection;
                     return true;
                 }
                 else
                 {
-                    Console.WriteLine("That is not a valid selection. Please try again.");
+                    Console.WriteLine("That is not a valid selection. Press any key to try again or press 9 to return to the main menu.");
+                    memberType = -1;
+                    return ReturnToMainMenu();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("That is not a valid selection. Press any key to try again or press 9 to return to the main menu.");
+                memberType = -1;
+                return ReturnToMainMenu();
+            }
+        }
+        public static bool ValidateClubInput(string clubSelection, out int clubSelectionToInt)
+        {
+            try
+            {
+                int.TryParse(clubSelection, out int convertedClubSelection);
+                if (convertedClubSelection > 4 || convertedClubSelection <= 0)
+                {
+                    clubSelectionToInt = convertedClubSelection;
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("That is not a valid club selection. Please try again.");
+                    clubSelectionToInt = -1;
                     return false;
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("That is not a valid selection. Press enter to try again or press 9 to return to the main menu.");
-                return ReturnToMainMenu();
+                Console.WriteLine("That is not a valid club selection. Please try again.");
+                clubSelectionToInt = -1;
+                return false;
             }
         }
-        public static Club SelectClub()
+
+        public static Club GetSelectedClub(int clubSelection)
         {
-            Console.WriteLine("Please select a club:");
             List<Club> clubs = GetAvailableClubList();
-            DisplayAvailableClubs();
-            string selectedClub = Console.ReadLine();
-            int convertedClubSelection = ConvertClubSelectionToInt(selectedClub);
-
-            while (convertedClubSelection > 4 || convertedClubSelection <= 0)
-            {
-                Console.WriteLine("That is not a valid club. Please select again:");
-                DisplayAvailableClubs();
-                string newClubSelection = Console.ReadLine();
-                convertedClubSelection = ConvertClubSelectionToInt(newClubSelection);
-            }
-
-            switch (convertedClubSelection)
+            switch (clubSelection)
             {
                 case 1:
                     return clubs[0];
@@ -180,18 +193,6 @@ namespace FitnessCenter
             }
         }
 
-        public static int ConvertClubSelectionToInt(string clubSelection)
-        {
-            bool canConvert = int.TryParse(clubSelection, out int result);
-            if (canConvert)
-            {
-                return result;
-            }
-            else
-            {
-                return -1;
-            }
-        }
 
         public static bool ValidateRemoveMember(string userSelection)
         {
@@ -220,7 +221,7 @@ namespace FitnessCenter
             {
                 ManageMember member = new ManageMember();
                 bool canConvert = int.TryParse(userSelection, out int result);
-                if (member.GetMember(result) != null)   
+                if (member.GetMember(result) != null)
                 {
                     Member requestedMember = member.GetMember(result);
 
@@ -262,7 +263,7 @@ namespace FitnessCenter
                 bool canConvert = int.TryParse(memberID, out int ID);
                 if (canConvert)
                 {
-                    Club club = SelectClub();
+                    Club club = ValidateClubInput();
                     memberManager.GetMember(ID).CheckIn(club);
                     FileManagement.WriteFile(memberManager.Members);
                     Console.WriteLine($"You have successfully checked into {club.Name}!");
