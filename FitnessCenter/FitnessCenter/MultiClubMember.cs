@@ -8,7 +8,7 @@ namespace FitnessCenter
 {
     public class MultiClubMember : Member
     {
-        public int MemberPoints { get; private set; }
+        public int MemberPoints { get; set; }
         public MultiClubMember(int id, string name)
         { 
             Id = id;

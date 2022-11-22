@@ -20,7 +20,8 @@ namespace FitnessCenter
             {
                 if (member is MultiClubMember)
                 {
-                    sw.WriteLine($"{"Multi"}|{member.Fee}|{member.Name}|{member.Id}");
+                    var multiClubMember = member as MultiClubMember;
+                    sw.WriteLine($"{"Multi"}|{member.Fee}|{member.Name}|{member.Id}|{multiClubMember.MemberPoints}");
                 }
                 if (member is SingleClubMember)
                 {
@@ -66,6 +67,7 @@ namespace FitnessCenter
                         Fee = Convert.ToDouble(parts[1]),
                         Name = parts[2],
                         Id = Convert.ToInt32(parts[3]),
+                        MemberPoints = Convert.ToInt32(parts[4])
                         
                     };
                     multiClubMembers.Add(multiClubMember);
