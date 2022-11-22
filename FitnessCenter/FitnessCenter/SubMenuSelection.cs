@@ -46,9 +46,9 @@ namespace FitnessCenter
                             DisplayAvailableClubs();
                             selectedClub = Console.ReadLine();
                         }
-                        Club club = GetSelectedClub(Convert.ToInt32(selectedClub));
-                        manageMember.AddMember(memberName, club);
-                        Console.WriteLine($"{memberName} has been successfully added to {club.Name}!");
+                        Club selectClub = GetSelectedClub(Convert.ToInt32(selectedClub));
+                        manageMember.AddMember(memberName, selectClub);
+                        Console.WriteLine($"{memberName} has been successfully added to {selectClub.Name}!");
                     }
                     else
                     {
@@ -58,6 +58,7 @@ namespace FitnessCenter
                     break;
                 case 2:
                     Console.WriteLine("Please enter the ID of the member you would like to remove:");
+                    DisplayAllMembers();
                     string removeMemberId = Console.ReadLine();
 
                     while (!ValidateMemberID(removeMemberId))
@@ -72,6 +73,7 @@ namespace FitnessCenter
                     break;
                 case 3:
                     Console.WriteLine("Please enter the ID of the member information you would like to display:");
+                    DisplayAllMembers();
                     string displayMemberId = Console.ReadLine();
 
                     while (!ValidateMemberID(displayMemberId))
@@ -86,23 +88,23 @@ namespace FitnessCenter
                     if (requestedMember is SingleClubMember)
                     {
                         var singleClubMember = requestedMember as SingleClubMember;
-                        clubText = $"Member's Club: {singleClubMember.ClubMember}";
+                        clubText = $"Membership Type: Single Member\nMember's Club: {singleClubMember.ClubMember}";
                     }
                     else
                     {
                         var multiClubMember = requestedMember as MultiClubMember;
-                        clubText = $"Membership Points: {multiClubMember.MemberPoints}";
+                        clubText = $"Membership Type: Multi-Club Member\nMembership Points: {multiClubMember.MemberPoints}";
                     }
 
                     Console.WriteLine($"Name: {requestedMember.Name}" +
                     $"\nId Number: {requestedMember.Id}" +
                     $"\nMember Fee: {requestedMember.Fee:C}" +
-                    $"\nMembership Type: Multi-Club Member" +
                     $"\n{clubText}");
 
                     break;
                 case 4:
                     Console.WriteLine("Please enter the ID of the member checking in:");
+                    DisplayAllMembers();
                     string memberId = Console.ReadLine();
 
                     while (!ValidateMemberID(memberId))
@@ -123,12 +125,13 @@ namespace FitnessCenter
                         clubChoice = Console.ReadLine();
                     }
 
-                    CheckIntoClub(Convert.ToInt32(memberId), Convert.ToInt32(clubChoice));
                     Member checkInMember = GetMemberInfo(Convert.ToInt32(memberId));
-                    Console.WriteLine($"{checkInMember.Name} was successfully checked into {clubChoice}.");
+                    Club club = GetSelectedClub(Convert.ToInt32(clubChoice));
+                    Console.WriteLine($"{checkInMember.Name} was successfully checked into {club.Name}.");
                     break;
                 case 5:
-                    Console.WriteLine("Please enter the name or ID of the member you would like to generate a bill for:");
+                    Console.WriteLine("Please enter the ID of the member you would like to generate a bill for:");
+                    DisplayAllMembers();
                     string memberIdForBill = Console.ReadLine();
 
                     while (!ValidateMemberID(memberIdForBill))
@@ -143,14 +146,19 @@ namespace FitnessCenter
                     break;
                 case 6:
                     Console.WriteLine("Current Members are:");
-                    List<Member> members = FileManagement.ReadFile();
-                    var memberbyId = members.OrderBy(x => x.Name).ToList();
-                    memberbyId.ForEach(x => Console.WriteLine($"Id:{x.Id,-2} | Name: {x.Name}"));
+                    DisplayAllMembers();
                     break;
                 default:
                     break;
             }
             ClearDisplay();
+        }
+
+        public static void DisplayAllMembers()
+        {
+            List<Member> members = FileManagement.ReadFile();
+            var memberbyId = members.OrderBy(x => x.Name).ToList();
+            memberbyId.ForEach(x => Console.WriteLine($"Id:{x.Id,-2} | Name: {x.Name}"));
         }
 
         public static Member GetMemberInfo(int ID)
@@ -262,6 +270,7 @@ namespace FitnessCenter
                 Club club = GetSelectedClub(clubSelection);
                 memberManager.GetMember(memberID)
                              .CheckIn(club);
+                FileManagement.WriteFile(memberManager.Members); 
                 return true;
             }
             catch (Exception)

@@ -24,8 +24,6 @@ namespace FitnessCenter
         public override void CheckIn(Club club)
         {
             MemberPoints += 50;
-            ManageMember manageMember = new ManageMember();
-            FileManagement.WriteFile(manageMember.Members);
         }
     }
 }
