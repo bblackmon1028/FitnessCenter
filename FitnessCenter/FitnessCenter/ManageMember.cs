@@ -22,11 +22,11 @@ namespace FitnessCenter
                 throw new Exception("Invalid member name passed when trying to add member");
         }
 
-        public void AddMember(string memberName, string clubName)
+        public void AddMember(string memberName, Club club)
         {
-            if (!string.IsNullOrEmpty(memberName) && !string.IsNullOrEmpty(clubName))
+            if (!string.IsNullOrEmpty(memberName) && !string.IsNullOrEmpty(club.Name))
             {
-                Members.Add(new SingleClubMember(GetNextId(), memberName, clubName));
+                Members.Add(new SingleClubMember(GetNextId(), memberName, club.Name));
                 FileManagement.WriteFile(Members);
             }
             else
@@ -44,19 +44,7 @@ namespace FitnessCenter
             }
             else throw new Exception("Unable to remove member");
         }
-
-        public void RemoveMember(string memberName)
-        {
-            Member member = GetMember(memberName);
-
-            if (member != null)
-            {
-                Members.Remove(member);
-                FileManagement.WriteFile(Members);
-            }
-            else throw new Exception("Unable to remove member");
-        }
-        
+                
         public Member GetMember(int id)
         {
             try
